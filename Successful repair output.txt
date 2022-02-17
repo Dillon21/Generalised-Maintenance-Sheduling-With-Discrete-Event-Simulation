@@ -1,0 +1,70 @@
+runfile('D:/Uni work/Honours project/Code/asset sim.py', wdir='D:/Uni work/Honours project/Code')
+Reloaded modules: day
+
+chance1 =  0.053000000000000005
+value =  0.4173
+working
+8
+
+chance1 =  0.05600000000000001
+value =  0.6799
+working
+7
+
+chance1 =  0.05900000000000001
+value =  0.3251
+working
+6
+
+chance1 =  0.06200000000000001
+value =  0.4138
+working
+5
+
+chance1 =  0.06500000000000002
+value =  0.4935
+working
+4
+
+chance1 =  0.06800000000000002
+value =  0.3665
+working
+3
+
+chance1 =  0.07100000000000002
+value =  0.1091
+working
+2
+
+chance1 =  0.07400000000000002
+value =  0.8966
+working
+1
+asset is operating till hour 8
+asset has stopped till hour 24
+
+chance1 =  0.07700000000000003
+value =  0.5244
+working
+8
+
+chance1 =  0.08000000000000003
+value =  0.9594
+broken
+7
+repair hours = 3 
+repair hours = 2 
+repair hours = 1 
+repair hours = 0 
+
+chance1 =  0.053000000000000005
+value =  0.271
+working
+2
+
+chance1 =  0.05600000000000001
+value =  0.1757
+working
+1
+asset is operating till hour 32
+asset has stopped till hour 48
