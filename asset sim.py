@@ -99,6 +99,8 @@ class asset(object):
     def getRepairTime(self):
         return self.repairTime
     
+    #get a random value for every cycle
+    #each hour will present a different chance for failure
     def getRandom(self):
         import random
         import time
@@ -106,6 +108,8 @@ class asset(object):
         random.seed(time.localtime())
         value = round(random.uniform(0,1), 4)
         return value
+    
+    
         
 import simpy
 env = simpy.Environment()
