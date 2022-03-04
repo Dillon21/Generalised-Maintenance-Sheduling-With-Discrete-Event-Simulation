@@ -32,7 +32,7 @@ class asset(object):
             Day.workDay()
             # wait for working day to end
             
-            yield self.env.process(self.work())
+            self.env.process(self.work())
         
             print("asset is operating till hour %d" % self.env.now)
             
@@ -49,10 +49,12 @@ class asset(object):
             
             #if asset is broken stop working to repair
             while self.broken == True:
+                if hours == 0:
+                    break
                 yield self.env.timeout(1)
                 hours -= 1
                 self.repairTime -= 1
-                print("repair hours = %d " % self.getRepairTime())
+                print(self.getName(), " repair hours = %d " % self.getRepairTime())
                 if self.repairTime == 0:
                     self.broken = False
                     self.maintain()
@@ -60,14 +62,15 @@ class asset(object):
             #normal operation    
             yield self.env.timeout(1)
             self.deteriorate(self)
-            print(hours)
+            print("working hours left = ", hours )
             hours -= 1
     
     
     @staticmethod    
     def deteriorate(self):
         self.break_Chance = (0.003 + self.break_Chance)
-        print("\nchance1 = ", self.break_Chance)
+        print("\n")
+        print(self.getName(), " chance roll = ", self.break_Chance)
         self.fail(self)
  
     #add code that will randomly break the asset    
@@ -114,6 +117,7 @@ class asset(object):
 import simpy
 env = simpy.Environment()
 asset1 = asset(env,"ford", 5)
+asset2 = asset(env,"lexus", 10)
 
 env.run(until=49)
 
