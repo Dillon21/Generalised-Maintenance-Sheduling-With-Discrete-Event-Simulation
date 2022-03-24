@@ -5,7 +5,6 @@ Created on Tue Feb 15 19:28:24 2022
 @author: dillo
 """
 
-
 class asset(object):
     def __init__(self, env, name, age):
          self.env = env
@@ -16,6 +15,7 @@ class asset(object):
          self.break_Chance = 0
          self.broken = False
          self.repairTime = 0
+         self.path = ''
         
     def run(self):
         #initialse brake chance according to age
@@ -23,6 +23,8 @@ class asset(object):
         self.maintain()
         import day
         Day = day.day(0)
+        
+        self.createCSV()
         
         
         while True:
@@ -105,13 +107,32 @@ class asset(object):
     #get a random value for every cycle
     #each hour will present a different chance for failure
     def getRandom(self):
-        import random
-        import time
-        time.sleep(1)
-        random.seed(time.localtime())
-        value = round(random.uniform(0,1), 4)
+        from random import SystemRandom
+        randfloat = SystemRandom()
+        value = randfloat.random()
+        import csv
+        with open(self.path,'a',newline='') as file:
+            if self.broken:
+                writer = csv.writer(file)
+                writer.writerow([self.break_Chance,value,'broken'])
+            else:    
+                writer = csv.writer(file)
+                writer.writerow([self.break_Chance,value, 'working'])
+        
         return value
     
+    def createCSV(self):
+        import os
+        folder_Path = 'test'
+        if not os.path.exists(folder_Path):
+            os.makedirs(folder_Path)
+        
+        path = folder_Path + '\\' + self.getName() + '.csv'
+        self.path = path
+        import csv
+        with open(path,'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Age wear','break chance', 'Status'])
     
         
 import simpy
