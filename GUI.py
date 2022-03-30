@@ -51,7 +51,7 @@ layout = [[
     #[sg.Column(outputColumn, element_justification='left')],
      sg.Frame('inputs', [[
         sg.Column(buttons,vertical_alignment='center', expand_x=True),
-        ]]),
+        ]],border_width = 0),
     
     
     sg.VSeperator(),
