@@ -25,11 +25,13 @@ class assetGetter():
         assetList = []
         
         from asset import asset
-        for row in lst.itertuples(index=True, name='Pandas'):
-            lst.
+        
+        #needs optimisation not best way
+        for index, row in df.iterrows():
+            print(row["c1"], row["c2"])
         
         for i in range(len(assetList)):
-            print(assetList[i].getName())
+            print(assetList[i].getName(), assetList[i].getA)
         
 
 assetGetter.convertToAsset()
