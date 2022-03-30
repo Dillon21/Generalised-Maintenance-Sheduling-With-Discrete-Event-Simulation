@@ -23,9 +23,10 @@ class assetGetter():
         lst.reset_index()
         print(lst)
         assetList = []
+        
         from asset import asset
         for row in lst.itertuples(index=True, name='Pandas'):
-            print(row.Name, row.Age)
+            lst.
         
         for i in range(len(assetList)):
             print(assetList[i].getName())
