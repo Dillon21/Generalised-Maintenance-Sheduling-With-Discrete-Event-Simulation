@@ -32,7 +32,7 @@ class machine(object):
 from assetGetter import assetGetter    
 machine1 = machine(assetGetter.convertToAsset())
 machine1.go()
-#env.run(until=8761)
+env.run(until=8761)
 
 import matplotlib.pyplot as plt
 

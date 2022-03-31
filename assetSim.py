@@ -15,7 +15,7 @@ class assetSim(object):
          self.action = env.process(self.run())
          self.name = asset.getName()
          self.age = asset.getAge()
-         self.break_Chance = 0
+         self.break_Chance = self.age / 100
          self.broken = False
          self.repairTime = 0
          self.path = ''
@@ -25,7 +25,7 @@ class assetSim(object):
     def run(self):
         #initialse brake chance according to age
         #use maintain function as it does the same thing
-        self.maintain()
+        #self.maintain()
         import day
         Day = day.day(0)
         self.createCSV()
@@ -99,8 +99,8 @@ class assetSim(object):
             
     
     def maintain(self):
-        
-        self.break_Chance = (self.age / 100)
+        self.maintainCount = self.break_Chance * 1.10
+        self.break_Chance = (self.age / 100) * self.maintainCount
         
     def getRepairTime(self):
         return self.repairTime
