@@ -21,19 +21,20 @@ class assetGetter():
     def convertToAsset():
         lst = assetGetter.getList()
         lst.reset_index()
-        print(lst)
         assetList = []
         
         from asset import asset
         
         #needs optimisation not best way
-        for index, row in df.iterrows():
-            print(row["c1"], row["c2"])
+        for index, row in lst.iterrows():
+            
+            assetList.append(asset(row["Name"], int(row["Age"])))
         
-        for i in range(len(assetList)):
-            print(assetList[i].getName(), assetList[i].getA)
+        #for i in range(len(assetList)):
+            #print(assetList[i].getName(), assetList[i].getAge())
         
-
+        return assetList
+    
 assetGetter.convertToAsset()
 
 

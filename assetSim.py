@@ -5,14 +5,16 @@ Created on Tue Feb 15 19:28:24 2022
 @author: dillo
 """
 
-class assetSim():
+class assetSim(object):
+    from asset import asset
             
     def __init__(self, env, asset):
+         
          self.env = env
          # Start the run process everytime an instance is created.
          self.action = env.process(self.run())
-         self.name = name
-         self.age = age
+         self.name = asset.getName()
+         self.age = asset.getAge()
          self.break_Chance = 0
          self.broken = False
          self.repairTime = 0
@@ -133,7 +135,11 @@ class assetSim():
             writer = csv.writer(file)
             writer.writerow(['Age wear','break chance', 'Status'])
     
-        
+    def getName(self):
+        return self.name
+       
+    def getAge(self):
+        return self.age   
 
 
 
