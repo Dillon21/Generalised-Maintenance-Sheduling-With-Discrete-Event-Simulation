@@ -20,6 +20,7 @@ class assetSim(object):
          self.repairTime = 0
          self.path = ''
          self.value = 0;
+         self.maintainCount = 0
         
     def run(self):
         #initialse brake chance according to age
@@ -98,6 +99,7 @@ class assetSim(object):
             
     
     def maintain(self):
+        
         self.break_Chance = (self.age / 100)
         
     def getRepairTime(self):
@@ -117,10 +119,10 @@ class assetSim(object):
         with open(self.path,'a',newline='') as file:
             if self.broken == True:
                 writer = csv.writer(file)
-                writer.writerow([self.break_Chance,self.value,'broken'])
+                writer.writerow([self.break_Chance,self.value,'broken',self.env.now])
             elif self.broken != True:
                 writer = csv.writer(file)
-                writer.writerow([self.break_Chance,self.value, 'working'])
+                writer.writerow([self.break_Chance,self.value, 'working',self.env.now])
     
     def createCSV(self):
         import os
@@ -133,7 +135,7 @@ class assetSim(object):
         import csv
         with open(path,'w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Age wear','break chance', 'Status'])
+            writer.writerow(['Age wear','break chance', 'Status', 'Hour'])
     
     def getName(self):
         return self.name
