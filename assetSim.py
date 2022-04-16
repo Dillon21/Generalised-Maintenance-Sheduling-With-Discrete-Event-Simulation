@@ -15,13 +15,17 @@ class assetSim(object):
          self.action = env.process(self.run())
          self.name = asset.getName()
          self.age = asset.getAge()
-         self.break_Chance = self.age / 100
+         self.break_Chance = self.age / 1000
          self.broken = False
          self.repairTime = 0
          self.path = ''
          self.value = 0;
-         self.maintainCount = 0
+         self.maintainCount = self.break_Chance
         
+        
+        
+    #while asset is broken remove it from environment
+    
     def run(self):
         #initialse brake chance according to age
         #use maintain function as it does the same thing
@@ -55,12 +59,14 @@ class assetSim(object):
             
             #if asset is broken stop working to repair
             while self.broken == True:
-                
+                if hours == 0:
+                    break
 
                 yield self.env.timeout(1)
                 hours -= 1
                 self.repairTime -= 1
                 print(self.getName(), " repair hours = %d " % self.getRepairTime())
+                
                 if self.repairTime == 0:
                     self.broken = False
                     self.maintain()
@@ -76,7 +82,7 @@ class assetSim(object):
     
     @staticmethod    
     def deteriorate(self):
-        self.break_Chance = (0.003 + self.break_Chance)
+        self.break_Chance = (0.0003 + self.break_Chance)
         print("\n")
         print(self.getName(), " condition rating  = ", self.break_Chance)
         self.fail(self)
@@ -93,14 +99,17 @@ class assetSim(object):
             print("broken")
             self.repairTime = 4
             
-        elif self.value < (1-self.break_Chance):
+        elif self.value < (1-self.break_Chance) and self.broken == True:
             self.broken = False
             print("working")
             
     
     def maintain(self):
-        self.maintainCount = self.break_Chance * 1.10
-        self.break_Chance = (self.age / 100) * self.maintainCount
+        self.maintainCount = self.maintainCount * 1.10
+        self.break_Chance = (self.age / 1000) * self.maintainCount
+        
+        if self.break_Chance > 0.5:
+            self.break_Chance = (self.age / 100)
         
     def getRepairTime(self):
         return self.repairTime
@@ -141,7 +150,9 @@ class assetSim(object):
         return self.name
        
     def getAge(self):
-        return self.age   
+        return self.age
+    
+    
 
 
 
