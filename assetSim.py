@@ -15,7 +15,7 @@ class assetSim(object):
          self.action = env.process(self.run())
          self.name = asset.getName()
          self.age = asset.getAge()
-         self.break_Chance = self.age / 1000
+         self.break_Chance = self.age / 100
          self.broken = False
          self.repairTime = 0
          self.path = ''
@@ -82,7 +82,7 @@ class assetSim(object):
     
     @staticmethod    
     def deteriorate(self):
-        self.break_Chance = (0.0003 + self.break_Chance)
+        self.break_Chance = (0.003 + self.break_Chance)
         print("\n")
         print(self.getName(), " condition rating  = ", self.break_Chance)
         self.fail(self)
@@ -106,7 +106,7 @@ class assetSim(object):
     
     def maintain(self):
         self.maintainCount = self.maintainCount * 1.10
-        self.break_Chance = (self.age / 1000) * self.maintainCount
+        self.break_Chance = (self.age / 100) * self.maintainCount
         
         if self.break_Chance > 0.5:
             self.break_Chance = (self.age / 100)
