@@ -12,6 +12,8 @@ class asset(object):
     def __init__(self, name, age):
         self.name = name
         self.age = age
+        self.repairTime = 0
+        self.replaceTime = 0
         #self.fluid = fluid
         #self.fluidEOF = fluidEOF
         

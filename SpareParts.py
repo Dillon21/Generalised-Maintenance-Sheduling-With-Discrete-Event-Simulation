@@ -16,8 +16,13 @@ class SpareParts(object):
         self.df = df
         self.df.to_csv(self.path)
             
-            
     def getParts():
         return self.df
+    
+    
+import time
+
+for i in range (1000):
+    print (round(time.time() * 1000))
     
     

@@ -41,12 +41,18 @@ folder_Path = 'test'
 path = folder_Path + '\\' + 'Bmw' + '.csv'
 import pandas as pd
 df = pd.read_csv(path)
-df = df.iloc[500:1000]
+df = df.iloc[500:1500]
 print(df)
-        
+
+
 plt.plot(df['Hour'], df['Age wear'])
 plt.title('Machine')
 plt.xlabel('Time(hours)')
 plt.ylabel('Level of wear')
 plt.grid(True)
 plt.show()
+
+#df = pd.DataFrame({'Maintenance?':['yes', 'no'], 'Hours Broken':[184,236]})
+#ax = df.plot.bar(x='Maintenance?', y='Hours Broken', rot=0)
+
+
