@@ -15,13 +15,15 @@ class assetSim(object):
          self.action = env.process(self.run())
          self.name = asset.getName()
          self.age = asset.getAge()
-         self.break_Chance = self.age / 100
+         self.maxAge = asset.getMaxAge()
+         self.break_Chance = self.calcInitCond()
          self.broken = False
          self.repairTime = 0
          self.path = ''
          self.value = 0;
-         self.maintainCount = self.break_Chance
+         self.maintainCount = 1
          self.workingHours = 0
+         self.asset = asset
          
         
         
@@ -59,32 +61,42 @@ class assetSim(object):
         hours = 8
         while hours > 0:
             
-            if self.workingHours % 24 == 0:
-                self.maintain()
+            
                 
             #if asset is broken stop working to repair
             while self.broken == True:
                 if hours == 0:
                     break
-
-                yield self.env.timeout(1)
-                hours -= 1
-                self.repairTime -= 1
-                print(self.getName(), " repair hours = %d " % self.getRepairTime())
+                else:
+                    yield self.env.timeout(1)
+                    hours -= 1
+                    self.setAge(self.age + 1)
+                    self.repairTime -= 1
+                    print(self.getName(), " repair hours = %d " % self.getRepairTime())
+                    
+                    if self.repairTime == 0:
+                        self.repair()
+                        #self.broken = False
+                    else:
+                        self.appendCSV()
+                    break
+                    
+            
+            while self.broken == False and hours > 0:
                 
-                if self.repairTime == 0:
-                    self.maintain()
-                    self.broken = False
-                self.appendCSV()
+                
+                #normal operation
+                self.workingHours += 1
+                self.deteriorate(self) 
+                self.appendCSV()   
+                yield self.env.timeout(1)
+                self.setAge(self.age + 1)
+                
+                print("working hours left = ", hours )
+                hours -= 1
             
-            #normal operation
-            self.workingHours += 1
-            self.deteriorate(self) 
-            self.appendCSV()   
-            yield self.env.timeout(1)
-            
-            print("working hours left = ", hours )
-            hours -= 1
+            if self.workingHours / 24 == 0 and hours >=2:
+                self.maintain()
     
     
     @staticmethod    
@@ -113,19 +125,31 @@ class assetSim(object):
             
     
     def maintain(self):
-        if self.broken == True: 
-            self.workingHours = 0
-            self.maintainCount = self.maintainCount * 1.10
-            self.break_Chance = (self.age / 100) * self.maintainCount
-            
-            if self.break_Chance > 0.5:
-                self.break_Chance = (self.age / 100)
-                self.maintainCount = self.break_Chance
-                
-        elif self.broken == False:
+        #maintaining
+        if self.broken == False:
             self.env.timeout(2)
             self.workingHours = 0
         
+        
+    def repair(self):
+        if self.break_Chance > 0.5:
+            self.workingHours = 0
+            self.setAge(0)
+            self.break_Chance = (self.calcInitCond())
+            self.broken = False
+                
+        if self.broken == True: 
+            self.workingHours = 0
+            self.maintainCount = self.maintainCount * 1.10
+            self.break_Chance = (self.calcInitCond() + self.maintainCount) / 10
+            self.broken = False
+                      
+        
+    def calcInitCond(self):
+       out = 0
+       out = (self.age/self.maxAge) / 10
+       return out   
+   
     def getRepairTime(self):
         return self.repairTime
     
@@ -167,7 +191,10 @@ class assetSim(object):
     def getAge(self):
         return self.age
     
-    
+    def setAge(self, age):
+        Age = age
+        self.age = Age
+        self.asset.setAge(Age)
 
 
 

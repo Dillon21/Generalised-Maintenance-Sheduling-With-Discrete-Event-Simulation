@@ -9,9 +9,10 @@ class asset(object):
     
         
     #fluid implemented by days till fluid EOF  
-    def __init__(self, name, age):
+    def __init__(self, name, age, maxAge):
         self.name = name
         self.age = age
+        self.maxAge = maxAge;
         self.repairTime = 0
         self.replaceTime = 0
         #self.fluid = fluid
@@ -20,8 +21,8 @@ class asset(object):
     def setName(self,name):
         self.name = name
     
-    def setAge(self,age):
-        self.age = age
+    def setMaxAge(self,maxAge):
+        self.maxAge = maxAge
         
     def setFluid(self,fluid):
         self.fluid = fluid
@@ -37,6 +38,12 @@ class asset(object):
        
     def getAge(self):
         return self.age
+       
+    def getMaxAge(self):
+        return self.maxAge
+    
+    def setAge(self,age):
+        self.age = age
     
 #test values    
 #asset1 = asset('ford',10, True,60)
