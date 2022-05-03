@@ -4,53 +4,38 @@ Created on Wed Mar 30 21:35:50 2022
 
 @author: dillo
 """
-import simpy
-env = simpy.Environment()
 
 class machine(object):
     
     
-    def __init__(self, assetlist):
-        self.assetlist = assetlist
+    def __init__(self,name, compList):
+        self.compList = compList
+        self.name = name
         #self.simList = []
         
 
-    def go(self):
+    def go(self, env):
         
         from assetSim import assetSim
         simList = []
+        
         #self.simList.append(assetSim(env,self.assetlist[0]))
-        for i in range(len(self.assetlist)):
-            simList.append(assetSim(env,self.assetlist[i]))
+        
+        #add each 
+        for i in range(len(self.compList)):
+            simList.append(assetSim(env,self.compList[i], self.name))
             
         
         #for i in range(len(self.assetlist)):
             #print(self.assetlist[i].getName(), self.assetlist[i].getAge())
         
-        
-
-from assetGetter import assetGetter    
-machine1 = machine(assetGetter.convertToAsset())
-machine1.go()
-env.run(until=8761)
-
-import matplotlib.pyplot as plt
-
-import csv
-folder_Path = 'test'
-path = folder_Path + '\\' + 'Bmw' + '.csv'
-import pandas as pd
-df = pd.read_csv(path)
-df = df.iloc[500:1500]
-print(df)
+    def getName(self):
+        return self.name
+    
+    def setList(self, lst):
+        self.compList = lst
 
 
-plt.plot(df['Hour'], df['Age wear'])
-plt.title('Machine')
-plt.xlabel('Time(hours)')
-plt.ylabel('Level of wear')
-plt.grid(True)
-plt.show()
 
 #df = pd.DataFrame({'Maintenance?':['yes', 'no'], 'Hours Broken':[184,236]})
 #ax = df.plot.bar(x='Maintenance?', y='Hours Broken', rot=0)

@@ -5,10 +5,10 @@ Created on Tue Feb 15 19:28:24 2022
 @author: dillo
 """
 
-class assetSim(object):
+class assetSim():
     from asset import asset
             
-    def __init__(self, env, asset):
+    def __init__(self, env, asset,machineName):
          
          self.env = env
          # Start the run process everytime an instance is created.
@@ -16,14 +16,17 @@ class assetSim(object):
          self.name = asset.getName()
          self.age = asset.getAge()
          self.maxAge = asset.getMaxAge()
-         self.break_Chance = self.calcInitCond()
+         self.break_Chance = self.calcInitCond() / 100
          self.broken = False
          self.repairTime = 0
          self.path = ''
          self.value = 0;
-         self.maintainCount = 1
+         self.maintainCount = 0
          self.workingHours = 0
          self.asset = asset
+         self.machineName = machineName
+         self.stoppedAssets = []
+         #self.spareParts = self.getSpareParts()
          
         
         
@@ -36,7 +39,8 @@ class assetSim(object):
         #self.maintain()
         import day
         Day = day.day(0)
-        self.createCSV()
+        self.createCSV(self.machineName)
+        
         
         
         while True:
@@ -60,11 +64,11 @@ class assetSim(object):
         # 8 hours working day
         hours = 8
         while hours > 0:
+            print(machList)
             
-            
-                
             #if asset is broken stop working to repair
             while self.broken == True:
+                print(self.name ," ", self.age)
                 if hours == 0:
                     break
                 else:
@@ -84,24 +88,31 @@ class assetSim(object):
             
             while self.broken == False and hours > 0:
                 
+                print(self.name ," ", self.age)
+                if self.machineName in self.stoppedAssets:
+                    yield self.env.timeout(1)
+                    self.appendCSV() 
                 
-                #normal operation
-                self.workingHours += 1
-                self.deteriorate(self) 
-                self.appendCSV()   
-                yield self.env.timeout(1)
-                self.setAge(self.age + 1)
+                else:
+                    #normal operation
+                    self.workingHours += 1
+                    self.deteriorate(self) 
+                    self.appendCSV()   
+                    yield self.env.timeout(1)
+                    self.setAge(self.age + 1)
+                    
+                    if self.workingHours / 24 == 0 and hours >=2:
+                        self.maintain()
                 
                 print("working hours left = ", hours )
                 hours -= 1
             
-            if self.workingHours / 24 == 0 and hours >=2:
-                self.maintain()
+            
     
     
     @staticmethod    
     def deteriorate(self):
-        counter = self.workingHours * 0.0001
+        counter = self.workingHours * 0.0005
         self.break_Chance = (0.0003 + self.break_Chance) + counter
         print("\n")
         print(self.getName(), " condition rating  = ", self.break_Chance)
@@ -117,6 +128,7 @@ class assetSim(object):
         if self.value >= (1 - self.break_Chance):
             self.broken = True
             print("broken")
+            self.stoppedAssets.append(self.machineName)
             self.repairTime = 4
             
         elif self.value < (1-self.break_Chance) and self.broken == True:
@@ -137,17 +149,20 @@ class assetSim(object):
             self.setAge(0)
             self.break_Chance = (self.calcInitCond())
             self.broken = False
+            self.stoppedAssets.remove(self.machineName)
+            self.maintainCount = 0
                 
-        if self.broken == True: 
+        if self.broken == True:
             self.workingHours = 0
-            self.maintainCount = self.maintainCount * 1.10
-            self.break_Chance = (self.calcInitCond() + self.maintainCount) / 10
+            self.maintainCount = (self.break_Chance * 1.10)
+            self.break_Chance = (self.calcInitCond() /100) * self.maintainCount
             self.broken = False
+            self.stoppedAssets.remove(self.machineName)
                       
         
     def calcInitCond(self):
        out = 0
-       out = (self.age/self.maxAge) / 10
+       out = (self.age/self.maxAge) * 100
        return out   
    
     def getRepairTime(self):
@@ -172,13 +187,13 @@ class assetSim(object):
                 writer = csv.writer(file)
                 writer.writerow([self.break_Chance,self.value, 'working',self.env.now, self.repairTime])
     
-    def createCSV(self):
+    def createCSV(self,machine):
         import os
-        folder_Path = 'test'
+        folder_Path = 'test' + '\\' + machine
         if not os.path.exists(folder_Path):
             os.makedirs(folder_Path)
         
-        path = folder_Path + '\\' + self.getName() + '.csv'
+        path = folder_Path + '\\' + self.getName() + '_output' + '.csv'
         self.path = path
         import csv
         with open(path,'w', newline='') as file:
@@ -195,6 +210,23 @@ class assetSim(object):
         Age = age
         self.age = Age
         self.asset.setAge(Age)
+        
+# =============================================================================
+#     def getSpareParts(self):
+#         from assetGetter import assetGetter
+#         lst = assetGetter.getList('repairMan')
+#         lst.reset_index()
+#         
+#         
+#         return lst
+# =============================================================================
 
-
-
+# =============================================================================
+# import simpy
+# from asset import asset
+# env = simpy.Environment()
+# asset1 = asset('van', 100,200)
+# sim = assetSim(env, asset1)
+# 
+# print(sim.getSpareParts())
+# =============================================================================

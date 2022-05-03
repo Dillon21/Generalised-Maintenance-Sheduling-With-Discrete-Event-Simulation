@@ -1,0 +1,5 @@
+Part,Qty,Essential,Cost
+engine,1,yes,300
+ac,2,no,100
+brakeBooster,2,yes,40
+lights,8,no,5

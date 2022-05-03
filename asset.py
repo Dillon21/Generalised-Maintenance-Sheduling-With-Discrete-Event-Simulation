@@ -9,7 +9,7 @@ class asset(object):
     
         
     #fluid implemented by days till fluid EOF  
-    def __init__(self, name, age, maxAge):
+    def __init__(self,name, age, maxAge):
         self.name = name
         self.age = age
         self.maxAge = maxAge;

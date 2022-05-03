@@ -10,28 +10,42 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import PySimpleGUI as sg
 import matplotlib
 import os.path
-
-lines = []
-with open('Successful repair output.txt') as f:
-    lines = f.readlines()
- 
-print(lines)
-
-
+import pandas as pd
 
 
 buttons = [
     
-         [sg.Listbox(
-            values=lines, enable_events=True,select_mode='browse', size=(60, 10), key='-LISTBOX-', font=('Arial, 11'))],
-         [sg.Button('Get work year', 'left'),
-         sg.Button('Get asset database', 'left'),
-         sg.Button('Get staff databse', 'left'),
-         sg.Button('Get spare parts database', 'left')]
+         [sg.Listbox(values=[], size=(20,4), enable_events=True, key='-LIST1-'),
+             ],
+         [
+         sg.In('get data folder',enable_events=True, key = '-output-'),
+         sg.FolderBrowse()
+         ]
+         
          
          
      
     ]
+
+
+    
+    
+def create_plot(p):
+    import matplotlib.pyplot as plt
+    import csv
+    import pandas as pd
+    path = p
+    df = pd.read_csv(path)
+    #df = df.iloc[500:1500]
+    print(df)
+    
+    
+    plt.plot(df['Hour'], df['Age wear'])
+    plt.title('Bmw')
+    plt.xlabel('Time(hours)')
+    plt.ylabel('Level of wear')
+    plt.grid(True)
+    return plt.gcf()
 
 
 fig = matplotlib.figure.Figure(figsize=(5, 4), dpi=100)
@@ -75,9 +89,32 @@ window = sg.Window(
 )
 
 
-# Add the plot to the window
-draw_figure(window["-CANVAS-"].TKCanvas, fig)
-
-event, values = window.read()
-
+while True:
+    event, values = window.read()
+    #if event == sg.WINDOW_CLOSED():
+       #break
+    if event == "-output-":
+        output = values["-output-"]
+        try:
+            file_list = os.listdir(output)
+        except:
+            file_list = []
+        
+        fnames = [
+            f
+            for f in file_list
+            if os.path.isfile(os.path.join(output,f))
+            and f.lower().endswith(".csv")
+            ]
+        window["-LIST1-"].update(fnames)
+    elif event == "-LIST1-":
+        try:
+            filename = os.path.join(
+                values["-output-"], values["-LIST1-"][0])
+            window["-CANVAS-"].TKCanvas.delete("all")
+            draw_figure(window["-CANVAS-"].TKCanvas,create_plot(filename))
+        except:
+            pass
+            
+            
 window.close()
