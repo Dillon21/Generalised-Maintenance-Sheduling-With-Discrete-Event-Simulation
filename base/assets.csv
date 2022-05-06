@@ -1,2 +1,5 @@
 Name,Age,Maxage,Status
 Bmw,200,300,TRUE
+Ford,300,800,TRUE
+Lexus,100,500,TRUE
+Toyota,50,400,TRUE
