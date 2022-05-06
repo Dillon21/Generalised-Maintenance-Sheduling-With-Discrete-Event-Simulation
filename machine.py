@@ -4,6 +4,7 @@ Created on Wed Mar 30 21:35:50 2022
 
 @author: dillo
 """
+from Component import Component
 
 class machine(object):
     
@@ -34,6 +35,17 @@ class machine(object):
     
     def setList(self, lst):
         self.compList = lst
+        
+    def changeMaintenance(self, name, period):
+        for x in range(len(self.compList)):
+            
+            if self.compList[x].getName() == name:
+                self.compList[x].setMaintenancePeriod(period)
+                
+    def printAssetComponents(self):
+        for x in range(len(self.compList)):
+            print('Asset:' + self.name + '\n' + self.compList[x].toString())
+            
 
 
 
@@ -41,3 +53,22 @@ class machine(object):
 #ax = df.plot.bar(x='Maintenance?', y='Hours Broken', rot=0)
 
 
+# =============================================================================
+# #test changeMaintenance method
+# import pandas as pd
+# lst = []
+# 
+# lst.append(asset('engine', 800, 2000, 24))
+# lst.append(asset('gearbox', 800, 2000, 24))
+# lst.append(asset('ac', 800, 2000, 24))
+# lst.append(asset('lights', 800, 2000, 24))
+# 
+# 
+# machine1 = machine('Bmw', lst)
+# machine1.printAssetComponents()
+# machine1.changeMaintenance('engine', 48)
+# machine1.changeMaintenance('lights', 8)
+# 
+# machine1.printAssetComponents()
+# 
+# =============================================================================

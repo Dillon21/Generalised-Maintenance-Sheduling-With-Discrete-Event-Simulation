@@ -12,6 +12,13 @@ import matplotlib
 import os.path
 import pandas as pd
 
+runSim = [
+    [sg.Listbox(values=[], size=(20,4), enable_events=True, key='-LIST2-'),
+             ],
+         [
+         sg.In('get data folder',enable_events=True, key = '-output2-')
+    ]]
+
 
 buttons = [
     
@@ -26,6 +33,9 @@ buttons = [
          
      
     ]
+
+def new_Fleet():
+    
 
 
     
@@ -63,6 +73,7 @@ def draw_figure(canvas, figure):
 # Define the window layout
 layout = [[
     #[sg.Column(outputColumn, element_justification='left')],
+     sg.Frame('Run Simulation',[[sg.Column(runSim,vertical_alignment='center', expand_x=True)]]),
      sg.Frame('inputs', [[
         sg.Column(buttons,vertical_alignment='center', expand_x=True),
         ]],border_width = 0),
@@ -91,8 +102,7 @@ window = sg.Window(
 
 while True:
     event, values = window.read()
-    #if event == sg.WINDOW_CLOSED():
-       #break
+
     if event == "-output-":
         output = values["-output-"]
         try:
@@ -115,6 +125,8 @@ while True:
             draw_figure(window["-CANVAS-"].TKCanvas,create_plot(filename))
         except:
             pass
+    elif event == sg.WINDOW_CLOSED():
+        break
             
             
 window.close()
